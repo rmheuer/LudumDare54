@@ -1,0 +1,18 @@
+Theme: LIMITED SPACE
+
+
+Have the whole game in one room
+Escape room
+Be in a little box
+Limited number of spaces (in text)
+Tunnel
+Limit the number of times to press SPACE bar
+
+push things around but theres not very much space to do it
+lasers somehow (because cool)
+
+clown car that gets harder to drive as you put more clowns in it
+
+press space to change the direction of gravity
+platformer controls?
+tile based because that's easy to draw and program

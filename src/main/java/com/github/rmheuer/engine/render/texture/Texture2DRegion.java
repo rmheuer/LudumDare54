@@ -14,8 +14,8 @@ public interface Texture2DRegion {
 
         return new SubTexture2D(
                 getSourceTexture(),
-                new Vector2f(MathUtil.lerp(min.x, max.x, minX), MathUtil.lerp(min.x, max.x, maxX)),
-                new Vector2f(MathUtil.lerp(min.y, max.y, minY), MathUtil.lerp(min.y, max.y, maxY))
+                new Vector2f(MathUtil.lerp(min.x, max.x, minX), MathUtil.lerp(min.y, max.y, minY)),
+                new Vector2f(MathUtil.lerp(min.x, max.x, maxX), MathUtil.lerp(min.y, max.y, maxY))
         );
     }
 

@@ -22,16 +22,28 @@ public final class LudumDare54 extends BaseGame {
     private final Renderer2D render2d;
     private final Camera camera;
 
-    private final Texture2D testImage;
+    private final TileMap tileMap;
 
     public LudumDare54() throws IOException {
-        super(new WindowSettings(800, 600, "Ludum Dare 54"));
+        super(new WindowSettings(
+                TileMap.WIDTH * Tile.TILE_SIZE_PX * 3,
+                TileMap.HEIGHT * Tile.TILE_SIZE_PX * 3,
+                "Ludum Dare 54"));
         render2d = new Renderer2D(getRenderer());
 
         setBackgroundColor(ColorRGBA.black());
 
-        camera = new Camera(new ScaledOrthoProjection(ScaledOrthoProjection.ScaleMode.FIT, 4, 4, -1, 1));
-        testImage = getRenderer().createTexture2D(ResourceUtil.readAsStream("box.png"));
+        camera = new Camera(new ScaledOrthoProjection(ScaledOrthoProjection.ScaleMode.FIT, TileMap.WIDTH, TileMap.HEIGHT, -1, 1));
+        camera.getTransform().position.set(TileMap.WIDTH / 2f, TileMap.HEIGHT / 2f, 0);
+
+        Tile.init(getRenderer());
+        tileMap = new TileMap();
+
+        for (int i = 0; i < 10; i++) {
+            int x = (int) (Math.random() * TileMap.WIDTH);
+            int y = (int) (Math.random() * TileMap.HEIGHT);
+            tileMap.setTile(x, y, Tile.SOLID);
+        }
     }
 
     @Override
@@ -42,8 +54,8 @@ public final class LudumDare54 extends BaseGame {
     @Override
     protected void render(Renderer renderer) {
         DrawList2D draw = new DrawList2D();
-        draw.fillQuad(Rectangle.fromXYSizes(0, 0, 1, 1), new Vector4f(1, 1, 1, 1));
-        draw.drawImage(Rectangle.fromXYSizes(-1, -1, 1, 1), testImage);
+
+        tileMap.render(draw);
 
         Vector2i size = getWindow().getFramebufferSize();
         render2d.draw(draw, new Matrix4f(), camera.getProjectionMatrix(size.x, size.y), camera.getViewMatrix());
