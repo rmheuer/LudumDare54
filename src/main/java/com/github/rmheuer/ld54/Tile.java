@@ -30,13 +30,15 @@ public enum Tile {
         float sizeY = 1.0f / tilesY;
         for (Tile tile : values()) {
             int tileIdx = tile.idx;
+            if (tileIdx < 0)
+                continue;
 
             int col = tileIdx % tilesX;
             int row = tileIdx / tilesX;
 
             float x = col / (float) tilesX;
             float y = row / (float) tilesY;
-            tile.texture = texture.getSubRegion(x, y, x + sizeX, y + sizeY);
+            tile.texture = texture.getSubRegion(x, y, x + sizeX, y + sizeY).getFlippedX();
 //            tile.texture = texture.getSubRegion(0, 0, 1, 1);
         }
     }

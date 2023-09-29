@@ -5,10 +5,11 @@ import org.joml.Matrix4fStack;
 import org.joml.Vector3f;
 
 public final class PoseStack {
-    private final Matrix4fStack stack;
+    // FIXME: not public
+    public final Matrix4fStack stack;
 
     public PoseStack() {
-        stack = new Matrix4fStack();
+        stack = new Matrix4fStack(32);
     }
 
     public void push() {
