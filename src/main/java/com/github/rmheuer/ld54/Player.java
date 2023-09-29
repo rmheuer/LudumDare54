@@ -11,10 +11,12 @@ import org.joml.Vector2f;
 import java.io.IOException;
 
 public final class Player {
+    private final TileMap tileMap;
     private final Texture2DRegion texture;
     private final Vector2f position;
 
-    public Player(Renderer r) throws IOException {
+    public Player(TileMap tileMap, Renderer r) throws IOException {
+        this.tileMap = tileMap;
         texture = r.createTexture2D(ResourceUtil.readAsStream("idk.png")).getFlippedX();
         position = new Vector2f(4, 4);
     }
@@ -25,7 +27,7 @@ public final class Player {
         if (kb.isKeyPressed(Key.RIGHT)) moveX += 10;
         if (kb.isKeyPressed(Key.LEFT)) moveX -= 10;
 
-        if (position.y <= 2) {
+        if (tileMap.collides(position.x, position.y, 1, 1)) {
             moveY = 0;
             if (kb.isKeyPressed(Key.UP))
                 moveY = 20;

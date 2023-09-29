@@ -34,4 +34,18 @@ public final class TileMap {
             }
         }
     }
+
+    public boolean collides(float x, float y, float w, float h) {
+        int minX = (int) Math.floor(x);
+        int maxX = (int) Math.ceil(x + w);
+        int minY = (int) Math.floor(y);
+        int maxY = (int) Math.ceil(y + h);
+        for (int j = minY; j < maxY; j++) {
+            for (int i = minX; i < maxX; i++) {
+                if (getTile(i, j).isSolid())
+                    return true;
+            }
+        }
+        return false;
+    }
 }

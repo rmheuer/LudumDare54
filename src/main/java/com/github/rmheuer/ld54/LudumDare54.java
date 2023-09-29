@@ -56,7 +56,7 @@ public final class LudumDare54 extends BaseGame {
             tileMap.setTile(x, y, Tile.SOLID);
         }
 
-        player = new Player(getRenderer());
+        player = new Player(getRenderer(), tileMap);
     }
 
     @Override

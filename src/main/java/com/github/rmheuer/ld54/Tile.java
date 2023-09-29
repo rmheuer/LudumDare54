@@ -10,13 +10,14 @@ import java.io.IOException;
 
 public enum Tile {
     // Index is the frame number in Piskel
-    EMPTY(1),
-    SOLID(2);
+    EMPTY(1, false),
+    SOLID(2, true);
 
     public static final int TILE_SIZE_PX = 16;
 
     private final int idx;
     private Texture2DRegion texture;
+    private final boolean solid;
 
     public static void init(Renderer renderer) throws IOException {
         Bitmap bitmap = Bitmap.decode(ResourceUtil.readAsStream("tiles.png"));
@@ -43,11 +44,16 @@ public enum Tile {
         }
     }
 
-    Tile(int idx) {
+    Tile(int idx, boolean solid) {
         this.idx = idx - 1;
+        this.solid = solid;
     }
 
     public Texture2DRegion getTexture() {
         return texture;
+    }
+
+    public boolean isSolid() {
+        return solid;
     }
 }
