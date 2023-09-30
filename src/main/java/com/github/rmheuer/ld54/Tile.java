@@ -10,7 +10,8 @@ import java.io.IOException;
 
 public enum Tile {
     // Index is the frame number in Piskel
-    EMPTY(1, false),
+    EMPTY(0, false), // Empty tile (shows space behind)
+    BACKGROUND(1, false),
     SOLID(2, true);
 
     public static final int TILE_SIZE_PX = 16;
@@ -27,8 +28,8 @@ public enum Tile {
         Texture2D texture = renderer.createTexture2D();
         texture.setData(bitmap);
 
-        float sizeX = 1.0f / tilesX;
-        float sizeY = 1.0f / tilesY;
+        float sizeX = 1.0f / tilesX - 0.0001f;
+        float sizeY = 1.0f / tilesY - 0.0001f;
         for (Tile tile : values()) {
             int tileIdx = tile.idx;
             if (tileIdx < 0)

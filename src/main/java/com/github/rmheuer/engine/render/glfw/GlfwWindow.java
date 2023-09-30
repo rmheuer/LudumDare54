@@ -50,6 +50,7 @@ public abstract class GlfwWindow implements Window, Keyboard, Mouse {
         initContext();
 
         glfwShowWindow(handle);
+        glfwFocusWindow(handle);
     }
 
     protected abstract void setContextWindowHints();
