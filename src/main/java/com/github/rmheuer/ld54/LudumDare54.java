@@ -158,6 +158,9 @@ public final class LudumDare54 extends BaseGame implements Listener {
     }
 
     public void playerDied() {
+        if (level.getCurrentLevel() == 0)
+            return;
+
         switchToLevel(level.getCurrentLevel(), false);
         getAudioSystem().play(PlayOptions.play2D(playerDieSound));
     }
@@ -209,13 +212,6 @@ public final class LudumDare54 extends BaseGame implements Listener {
         level.render(draw);
         if (level.getCurrentLevel() != 0)
             player.render(draw);
-//        for (int depth = 9; depth >= 0; depth--) {
-//            poseStack.push();
-//            poseStack.stack.scale(1 - depth * 0.008f);
-//            poseStack.stack.translate(-TileMap.WIDTH / 2f, -TileMap.HEIGHT / 2f, 0);
-//            tileMap.render(draw);
-//            poseStack.pop();
-//        }
 
         Vector2i size = getWindow().getFramebufferSize();
         Vector2i virtualSize = getWindow().getSize();
@@ -234,16 +230,24 @@ public final class LudumDare54 extends BaseGame implements Listener {
         if (level.getCurrentLevel() == 0) {
             textOffset = virtualSize.y / 4f;
             left = "PRESS SPACE TO START";
+            drawFancyText(virtualSize, "ARROWS OR WASD TO MOVE", virtualSize.y / 4f - 38, screenDraw);
+            drawFancyText(virtualSize, "LUDUM DARE 54", virtualSize.y / 4f - 76, screenDraw);
+            drawFancyText(virtualSize, "BY RMHEUER AND CAPNBONES", virtualSize.y / 4f - 76 - 18, screenDraw);
         }
 
-        float width = pixelFont.textWidth(left);
-        screenDraw.fillQuad(Rectangle.fromCenterSizes(0, virtualSize.y / 2f - textOffset - 8, width + 4, 20), new ColorRGBA(0, 0, 0, 0.6f));
-        screenDraw.drawText(left, 2, virtualSize.y / 2f - textOffset + 2, 0.5f, 1f, pixelFont, ColorRGBA.black());
-        screenDraw.drawText(left, 0, virtualSize.y / 2f - textOffset, 0.5f, 1f, pixelFont, ColorRGBA.white());
+        drawFancyText(virtualSize, left, textOffset, screenDraw);
 
         ConstantOrthoProjection screenProj = new ConstantOrthoProjection(1, -1, 1);
         render2d.draw(screenDraw, new Matrix4f(), screenProj.getMatrix(virtualSize.x, virtualSize.y), new Matrix4f());
     }
+
+    private void drawFancyText(Vector2i virtualSize, String text, float textOffset, DrawList2D draw) {
+        float width = pixelFont.textWidth(text);
+        draw.fillQuad(Rectangle.fromCenterSizes(0, virtualSize.y / 2f - textOffset - 8, width + 4, 20), new ColorRGBA(0, 0, 0, 0.6f));
+        draw.drawText(text, 2, virtualSize.y / 2f - textOffset + 2, 0.5f, 1f, pixelFont, ColorRGBA.black());
+        draw.drawText(text, 0, virtualSize.y / 2f - textOffset, 0.5f, 1f, pixelFont, ColorRGBA.white());
+    }
+
 
     @Override
     protected void cleanUp() {
