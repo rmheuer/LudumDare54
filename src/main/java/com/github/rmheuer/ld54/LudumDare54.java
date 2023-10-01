@@ -117,6 +117,7 @@ public final class LudumDare54 extends BaseGame implements Listener {
     private void fixedTick(float dt) {
         if (!level.isTransitioning() && level.getCurrentLevel() != 0)
             player.control(dt, getWindow().getKeyboard());
+	level.tick(dt);
     }
 
     @Override
@@ -124,7 +125,6 @@ public final class LudumDare54 extends BaseGame implements Listener {
         Tile.tick(dt);
         background.tick(dt);
         update.update(dt);
-        level.tick(dt);
 
         if (music == null || !music.isPlaying()) {
             try {

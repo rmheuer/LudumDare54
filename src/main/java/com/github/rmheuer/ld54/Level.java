@@ -118,7 +118,7 @@ public final class Level {
     public void setTile(int x, int y, Tile tile) {
         tiles[x + y * SIZE] = tile;
     }
-
+    
     public void tick(float dt) {
         float rate = 3 * dt;
         if (nextLayout != null) {
@@ -135,10 +135,10 @@ public final class Level {
         }
 
         if (appearedness == 1) {
-            for (Entity e : entities) {
+	    for (Entity e : entities) {
                 e.tick(dt);
             }
-
+	    
             for (int x = 0; x < SIZE; x++) {
                 for (int y = 0; y < SIZE; y++) {
                     getTile(x, y).tick(this, x, y);
