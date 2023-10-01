@@ -52,6 +52,8 @@ public interface Window extends SafeCloseable {
      */
     Vector2i getFramebufferSize();
 
+    Vector2i getSize();
+
     Keyboard getKeyboard();
     Mouse getMouse();
 

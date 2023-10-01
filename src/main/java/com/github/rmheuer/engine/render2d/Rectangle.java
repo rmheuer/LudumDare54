@@ -10,6 +10,10 @@ public final class Rectangle {
         return new Rectangle(x, y, x + w, y + h);
     }
 
+    public static Rectangle fromCenterSizes(float cx, float cy, float w, float h) {
+        return new Rectangle(cx - w / 2, cy - h / 2, cx + w / 2, cy + h / 2);
+    }
+
     public Rectangle(float minX, float minY, float maxX, float maxY) {
         min = new Vector2f(minX, minY);
         max = new Vector2f(maxX, maxY);

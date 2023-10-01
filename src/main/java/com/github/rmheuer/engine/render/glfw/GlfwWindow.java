@@ -12,6 +12,7 @@ import com.github.rmheuer.engine.utils.BiMap;
 import org.joml.Vector2d;
 import org.joml.Vector2i;
 import org.lwjgl.glfw.Callbacks;
+import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.system.MemoryStack;
 
 import java.nio.IntBuffer;
@@ -35,13 +36,14 @@ public abstract class GlfwWindow implements Window, Keyboard, Mouse {
         glfwWindowHint(GLFW_RESIZABLE, settings.isResizable() ? GLFW_TRUE : GLFW_FALSE);
         glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
 
-        handle = glfwCreateWindow(
-                settings.getWidth(),
-                settings.getHeight(),
-                settings.getTitle(),
-                NULL,
-                NULL
-        );
+        if (settings.isFullScreen()) {
+            long monitor = glfwGetPrimaryMonitor();
+            GLFWVidMode vidMode = glfwGetVideoMode(monitor);
+            handle = glfwCreateWindow(vidMode.width(), vidMode.height(), settings.getTitle(), monitor, NULL);
+        } else {
+            handle = glfwCreateWindow(settings.getWidth(), settings.getHeight(), settings.getTitle(), NULL, NULL);
+        }
+
         if (handle == NULL) {
             throw new RuntimeException("Failed to create window");
         }
@@ -70,6 +72,16 @@ public abstract class GlfwWindow implements Window, Keyboard, Mouse {
     @Override
     public void setTitle(String title) {
         glfwSetWindowTitle(handle, title);
+    }
+
+    @Override
+    public Vector2i getSize() {
+        try (MemoryStack stack = MemoryStack.stackPush()) {
+            IntBuffer pWidth = stack.mallocInt(1);
+            IntBuffer pHeight = stack.mallocInt(1);
+            glfwGetWindowSize(handle, pWidth, pHeight);
+            return new Vector2i(pWidth.get(0), pHeight.get(0));
+        }
     }
 
     @Override

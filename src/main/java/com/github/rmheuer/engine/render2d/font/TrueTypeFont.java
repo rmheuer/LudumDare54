@@ -81,8 +81,10 @@ public final class TrueTypeFont extends Font {
             Bitmap atlasBmp = new Bitmap(bitmapWidth, bitmapHeight, pixels);
             atlas = renderer.createTexture2D();
             atlas.setData(atlasBmp);
-            atlas.setMinFilter(Texture.Filter.LINEAR);
-            atlas.setMagFilter(Texture.Filter.LINEAR);
+            atlas.setMinFilter(Texture.Filter.NEAREST);
+            atlas.setMagFilter(Texture.Filter.NEAREST);
+//            atlas.setMinFilter(Texture.Filter.LINEAR);
+//            atlas.setMagFilter(Texture.Filter.LINEAR);
 
             STBTTAlignedQuad q = STBTTAlignedQuad.malloc(stack);
             glyphs = new GlyphInfo[CHAR_COUNT];

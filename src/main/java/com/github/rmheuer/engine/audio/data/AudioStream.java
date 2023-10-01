@@ -196,7 +196,7 @@ public final class AudioStream implements AudioData {
             return null;
         }
 
-        return chunkQueue.remove();
+        return chunkQueue.poll();
     }
 
     @Override
