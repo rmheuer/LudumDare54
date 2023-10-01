@@ -60,6 +60,10 @@ public final class Player extends Entity {
         }
     }
 
+    public void resetVelocity() {
+        vel.set(0);
+    }
+
     @Override
     public void tick(float dt) {
         super.tick(dt);

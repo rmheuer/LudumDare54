@@ -73,6 +73,7 @@ public final class Level {
                 } else if (aboutEqual(pixel, 0.0f, 98 / 255f, 1.0f)) {
                     tile = Tile.BACKGROUND;
                     player.position.set(x, y);
+                    player.resetVelocity();
                 } else if (aboutEqual(pixel, 1.0f, 0.0f, 0.0f)) {
                     tile = Tile.GOAL;
                 } else if (aboutEqual(pixel, 0.5f, 0.0f, 1.0f)) {

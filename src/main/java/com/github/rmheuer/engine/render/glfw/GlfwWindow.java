@@ -53,6 +53,9 @@ public abstract class GlfwWindow implements Window, Keyboard, Mouse {
 
         glfwShowWindow(handle);
         glfwFocusWindow(handle);
+
+//        if (settings.isFullScreen())
+//            glfwMaximizeWindow(handle);
     }
 
     protected abstract void setContextWindowHints();

@@ -61,8 +61,7 @@ public final class LudumDare54 extends BaseGame implements Listener {
         super(new WindowSettings(
                 Level.SIZE * Tile.TILE_SIZE_PX * 2,
                 Level.SIZE * Tile.TILE_SIZE_PX * 2,
-                "Fancy Boots")
-                .setFullScreen(true));
+                "Gravity Warp"));
         INSTANCE = this;
         render2d = new Renderer2D(getRenderer());
         update = new FixedRateExecutor(1 / 60.0f, this::fixedTick);
@@ -196,6 +195,8 @@ public final class LudumDare54 extends BaseGame implements Listener {
             switchToLevel(level.getCurrentLevel(), true);
         } else if (event.getKey() == Key.ESCAPE) {
             stop();
+        } else if (event.getKey() == Key.Q && "true".equals(System.getProperty("ld54.debug"))) {
+            switchToLevel(level.getCurrentLevel() + 1, true);
         }
     }
 

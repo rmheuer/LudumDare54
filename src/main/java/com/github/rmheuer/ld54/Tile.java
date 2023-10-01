@@ -103,8 +103,8 @@ public enum Tile {
         Texture2D texture = renderer.createTexture2D();
         texture.setData(bitmap);
 
-        float sizeX = 1.0f / tilesX - 0.0001f;
-        float sizeY = 1.0f / tilesY - 0.0001f;
+        float sizeX = 1.0f / tilesX;// - 0.0001f;
+        float sizeY = 1.0f / tilesY;// - 0.0001f;
         for (Tile tile : values()) {
             Texture2DRegion[] frames = new Texture2DRegion[tile.idx.length];
             for (int i = 0; i < frames.length; i++) {
