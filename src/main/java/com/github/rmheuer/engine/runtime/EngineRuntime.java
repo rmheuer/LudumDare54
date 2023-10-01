@@ -68,7 +68,7 @@ public final class EngineRuntime {
             return false;
 
         if ("true".equals(System.getProperty(JVM_RESTARTED_PROP))) {
-            System.err.println("Failed to determine whether the JVM was started on the first thread");
+//            System.err.println("Failed to determine whether the JVM was started on the first thread");
             return false;
         }
 
