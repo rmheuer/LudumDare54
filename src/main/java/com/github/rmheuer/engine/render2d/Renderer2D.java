@@ -4,6 +4,7 @@ import com.github.rmheuer.engine.io.ResourceUtil;
 import com.github.rmheuer.engine.render.ColorRGBA;
 import com.github.rmheuer.engine.render.Renderer;
 import com.github.rmheuer.engine.render.mesh.Mesh;
+import com.github.rmheuer.engine.render.mesh.MeshData;
 import com.github.rmheuer.engine.render.pipeline.ActivePipeline;
 import com.github.rmheuer.engine.render.pipeline.PipelineInfo;
 import com.github.rmheuer.engine.render.shader.ShaderProgram;
@@ -57,8 +58,11 @@ public final class Renderer2D implements SafeCloseable {
                 pipeline.bindTexture(i, tex);
             }
         }
-        mesh.setData(batch.getData(), Mesh.DataUsage.DYNAMIC);
-        pipeline.draw(mesh);
+
+	try (MeshData data = batch.getData()) {
+	    mesh.setData(data, Mesh.DataUsage.DYNAMIC);
+	}
+	pipeline.draw(mesh);
 
 //        // Natives must be pre-obtained to prevent accidental state changes
 //        ShaderProgram.Native nShader = shader.getNative(nom);
