@@ -51,6 +51,7 @@ public final class LudumDare54 extends BaseGame implements Listener {
     private final AudioSample sensorActivatedSound;
     private final AudioSample sensorDeactivatedSound;
     private final AudioSample playerDieSound;
+    private final AudioSample jumpSound;
     private PlayingSound music;
 
     private final Font pixelFont;
@@ -102,6 +103,7 @@ public final class LudumDare54 extends BaseGame implements Listener {
         sensorActivatedSound = getAudioSystem().createSample(ResourceUtil.readAsStream("what.ogg"));
         sensorDeactivatedSound = getAudioSystem().createSample(ResourceUtil.readAsStream("woo.ogg"));
         playerDieSound = getAudioSystem().createSample(ResourceUtil.readAsStream("die.ogg"));
+        jumpSound = getAudioSystem().createSample(ResourceUtil.readAsStream("jump.ogg"));
 
         pixelFont = new TrueTypeFont(getRenderer(), ResourceUtil.readAsStream("Pixelated-0.ttf"), 16);
 
@@ -114,7 +116,7 @@ public final class LudumDare54 extends BaseGame implements Listener {
     final Texture2D boxTexture;
 
     private void fixedTick(float dt) {
-        if (!level.isTransitioning())
+        if (!level.isTransitioning() && level.getCurrentLevel() != 0)
             player.control(dt, getWindow().getKeyboard());
     }
 
@@ -144,6 +146,7 @@ public final class LudumDare54 extends BaseGame implements Listener {
         String levelFile = String.format("levels/level%02d.png", level);
         try {
             this.level.load(Bitmap.decode(ResourceUtil.readAsStream(levelFile)));
+            this.level.setCurrentLevel(level);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -164,11 +167,18 @@ public final class LudumDare54 extends BaseGame implements Listener {
         getAudioSystem().play(PlayOptions.play2D(activated ? sensorActivatedSound : sensorDeactivatedSound));
     }
 
+    public void playJumpSound() {
+        getAudioSystem().play(PlayOptions.play2D(jumpSound).setPitch(0.6f + 0.8f * (float) Math.random()));
+    }
+
     boolean whichMap = true;
     @EventHandler
     public void onKeyPress(KeyPressEvent event) {
         if (event.getKey() == Key.SPACE) {
-
+            if (level.getCurrentLevel() == 0) {
+                switchToLevel(1, true);
+                return;
+            }
 
             if (spaceLeft > 0) {
                 getAudioSystem().play(PlayOptions
@@ -182,7 +192,7 @@ public final class LudumDare54 extends BaseGame implements Listener {
 //            dirIdx++;
 //            dirIdx %= dirSequence.length;
 //            level.setGravity(dirSequence[dirIdx]);
-        } else if (event.getKey() == Key.R) {
+        } else if (event.getKey() == Key.R && level.getCurrentLevel() != 0) {
             switchToLevel(level.getCurrentLevel(), true);
         } else if (event.getKey() == Key.ESCAPE) {
             stop();
@@ -196,7 +206,8 @@ public final class LudumDare54 extends BaseGame implements Listener {
 
         background.render(draw);
         level.render(draw);
-        player.render(draw);
+        if (level.getCurrentLevel() != 0)
+            player.render(draw);
 //        for (int depth = 9; depth >= 0; depth--) {
 //            poseStack.push();
 //            poseStack.stack.scale(1 - depth * 0.008f);
@@ -213,14 +224,21 @@ public final class LudumDare54 extends BaseGame implements Listener {
         DrawList2D screenDraw = new DrawList2D();
         screenDraw.getPoseStack().stack.scale(1, -1, 1);
 
+        float textOffset = 5;
         String left = "SPACE LEFT: " + spaceLeft;
         if (spaceLeft == 0) {
             left += " (PRESS R TO RESTART)";
         }
+
+        if (level.getCurrentLevel() == 0) {
+            textOffset = virtualSize.y / 4f;
+            left = "PRESS SPACE TO START";
+        }
+
         float width = pixelFont.textWidth(left);
-        screenDraw.fillQuad(Rectangle.fromCenterSizes(0, virtualSize.y / 2f - 5 - 8, width + 4, 20), new ColorRGBA(0, 0, 0, 0.6f));
-        screenDraw.drawText(left, 2, virtualSize.y / 2f - 3, 0.5f, 1f, pixelFont, ColorRGBA.black());
-        screenDraw.drawText(left, 0, virtualSize.y / 2f - 5, 0.5f, 1f, pixelFont, ColorRGBA.white());
+        screenDraw.fillQuad(Rectangle.fromCenterSizes(0, virtualSize.y / 2f - textOffset - 8, width + 4, 20), new ColorRGBA(0, 0, 0, 0.6f));
+        screenDraw.drawText(left, 2, virtualSize.y / 2f - textOffset + 2, 0.5f, 1f, pixelFont, ColorRGBA.black());
+        screenDraw.drawText(left, 0, virtualSize.y / 2f - textOffset, 0.5f, 1f, pixelFont, ColorRGBA.white());
 
         ConstantOrthoProjection screenProj = new ConstantOrthoProjection(1, -1, 1);
         render2d.draw(screenDraw, new Matrix4f(), screenProj.getMatrix(virtualSize.x, virtualSize.y), new Matrix4f());

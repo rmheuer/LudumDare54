@@ -185,7 +185,8 @@ public final class Level {
         }
 
         for (Entity e : entities) {
-            e.render(draw);
+            if (e != player)
+                e.render(draw);
         }
     }
 
@@ -230,6 +231,10 @@ public final class Level {
 
     public int getCurrentLevel() {
         return currentLevel;
+    }
+
+    public void setCurrentLevel(int currentLevel) {
+        this.currentLevel = currentLevel;
     }
 
     public void addEntity(Entity e) {

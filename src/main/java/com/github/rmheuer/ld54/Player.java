@@ -21,30 +21,37 @@ public final class Player extends Entity {
         position.set(4, 4);
     }
 
+    boolean jumpedPrevFrame = false;
+
     public void control(float delta, Keyboard kb) {
         anim.tick(delta);
 
         GravityDir dir = level.getGravity();
-        if (onGround && kb.isKeyPressed(Key.UP)) {
+        if (onGround && (kb.isKeyPressed(Key.UP) || kb.isKeyPressed(Key.W))) {
+            if (!jumpedPrevFrame)
+                LudumDare54.INSTANCE.playJumpSound();
+            jumpedPrevFrame = true;
             switch (dir) {
                 case UP: vel.y = -20; break;
                 case DOWN: vel.y = 20; break;
                 case LEFT: vel.x = 20; break;
                 case RIGHT: vel.x = -20; break;
             }
+        } else {
+            jumpedPrevFrame = false;
         }
 
         boolean isYAxis = dir == GravityDir.UP || dir == GravityDir.DOWN;
 
         float speed = 1.5f;
-        if (kb.isKeyPressed(Key.LEFT)) {
+        if (kb.isKeyPressed(Key.LEFT) || kb.isKeyPressed(Key.A)) {
             flipped = true;
             if (isYAxis)
                 vel.x -= speed;
             else
                 vel.y -= speed;
         }
-        if (kb.isKeyPressed(Key.RIGHT)) {
+        if (kb.isKeyPressed(Key.RIGHT) || kb.isKeyPressed(Key.D)) {
             flipped = false;
             if (isYAxis)
                 vel.x += speed;
