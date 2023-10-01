@@ -195,7 +195,7 @@ public final class LudumDare54 extends BaseGame implements Listener {
             switchToLevel(level.getCurrentLevel(), true);
         } else if (event.getKey() == Key.ESCAPE) {
             stop();
-        } else if (event.getKey() == Key.Q && "true".equals(System.getProperty("ld54.debug"))) {
+        } else if (event.getKey() == Key.Q && getWindow().getKeyboard().isKeyPressed(Key.LEFT_SHIFT)) {
             switchToLevel(level.getCurrentLevel() + 1, true);
         }
     }
