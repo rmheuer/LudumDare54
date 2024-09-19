@@ -1,7 +1,7 @@
 package com.github.rmheuer.ld54;
 
-import com.github.rmheuer.engine.render2d.DrawList2D;
-import com.github.rmheuer.engine.render2d.Rectangle;
+import com.github.rmheuer.azalea.render2d.DrawList2D;
+import com.github.rmheuer.azalea.render2d.Rectangle;
 import org.joml.Vector2f;
 
 // Things that are affected by gravity in the leve

@@ -1,36 +1,32 @@
 package com.github.rmheuer.ld54;
 
-import com.github.rmheuer.engine.audio.PlayOptions;
-import com.github.rmheuer.engine.audio.data.AudioSample;
-import com.github.rmheuer.engine.audio.play.PlayingSound;
-import com.github.rmheuer.engine.event.EventHandler;
-import com.github.rmheuer.engine.event.Listener;
-import com.github.rmheuer.engine.input.keyboard.Key;
-import com.github.rmheuer.engine.input.keyboard.KeyPressEvent;
-import com.github.rmheuer.engine.input.keyboard.Keyboard;
-import com.github.rmheuer.engine.io.ResourceUtil;
-import com.github.rmheuer.engine.math.MathUtil;
-import com.github.rmheuer.engine.math.PoseStack;
-import com.github.rmheuer.engine.render.ColorRGBA;
-import com.github.rmheuer.engine.render.Renderer;
-import com.github.rmheuer.engine.render.WindowSettings;
-import com.github.rmheuer.engine.render.camera.Camera;
-import com.github.rmheuer.engine.render.camera.ConstantOrthoProjection;
-import com.github.rmheuer.engine.render.camera.ScaledOrthoProjection;
-import com.github.rmheuer.engine.render.texture.Bitmap;
-import com.github.rmheuer.engine.render.texture.Texture2D;
-import com.github.rmheuer.engine.render2d.DrawList2D;
-import com.github.rmheuer.engine.render2d.Rectangle;
-import com.github.rmheuer.engine.render2d.Renderer2D;
-import com.github.rmheuer.engine.render2d.font.Font;
-import com.github.rmheuer.engine.render2d.font.TrueTypeFont;
-import com.github.rmheuer.engine.runtime.BaseGame;
-import com.github.rmheuer.engine.runtime.EngineRuntime;
-import com.github.rmheuer.engine.runtime.FixedRateExecutor;
+import com.github.rmheuer.azalea.audio.PlayOptions;
+import com.github.rmheuer.azalea.audio.data.AudioSample;
+import com.github.rmheuer.azalea.audio.play.PlayingSound;
+import com.github.rmheuer.azalea.event.EventHandler;
+import com.github.rmheuer.azalea.event.Listener;
+import com.github.rmheuer.azalea.input.keyboard.Key;
+import com.github.rmheuer.azalea.input.keyboard.KeyPressEvent;
+import com.github.rmheuer.azalea.io.ResourceUtil;
+import com.github.rmheuer.azalea.math.PoseStack;
+import com.github.rmheuer.azalea.render.Colors;
+import com.github.rmheuer.azalea.render.Renderer;
+import com.github.rmheuer.azalea.render.WindowSettings;
+import com.github.rmheuer.azalea.render.camera.Camera;
+import com.github.rmheuer.azalea.render.camera.ConstantOrthoProjection;
+import com.github.rmheuer.azalea.render.camera.ScaledOrthoProjection;
+import com.github.rmheuer.azalea.render.texture.Bitmap;
+import com.github.rmheuer.azalea.render.texture.Texture2D;
+import com.github.rmheuer.azalea.render2d.DrawList2D;
+import com.github.rmheuer.azalea.render2d.Rectangle;
+import com.github.rmheuer.azalea.render2d.Renderer2D;
+import com.github.rmheuer.azalea.render2d.font.Font;
+import com.github.rmheuer.azalea.render2d.font.TrueTypeFont;
+import com.github.rmheuer.azalea.runtime.BaseGame;
+import com.github.rmheuer.azalea.runtime.FixedRateExecutor;
 import org.joml.Matrix4f;
-import org.joml.Vector2f;
 import org.joml.Vector2i;
-import org.joml.Vector3f;
+import org.joml.Vector4f;
 
 import java.io.IOException;
 
@@ -66,7 +62,7 @@ public final class LudumDare54 extends BaseGame implements Listener {
         render2d = new Renderer2D(getRenderer());
         update = new FixedRateExecutor(1 / 60.0f, this::fixedTick);
 
-        setBackgroundColor(ColorRGBA.black());
+        setBackgroundColor(Colors.RGBA.BLACK);
 
         camera = new Camera(new ScaledOrthoProjection(ScaledOrthoProjection.ScaleMode.FIT, Level.SIZE, Level.SIZE, -1, 1));
         camera.getTransform().position.set(Level.SIZE / 2f, Level.SIZE / 2f, 0);
@@ -243,11 +239,10 @@ public final class LudumDare54 extends BaseGame implements Listener {
 
     private void drawFancyText(Vector2i virtualSize, String text, float textOffset, DrawList2D draw) {
         float width = pixelFont.textWidth(text);
-        draw.fillQuad(Rectangle.fromCenterSizes(0, virtualSize.y / 2f - textOffset - 8, width + 4, 20), new ColorRGBA(0, 0, 0, 0.6f));
-        draw.drawText(text, 2, virtualSize.y / 2f - textOffset + 2, 0.5f, 1f, pixelFont, ColorRGBA.black());
-        draw.drawText(text, 0, virtualSize.y / 2f - textOffset, 0.5f, 1f, pixelFont, ColorRGBA.white());
+        draw.fillQuad(Rectangle.fromCenterSizes(0, virtualSize.y / 2f - textOffset - 8, width + 4, 20), Colors.RGBA.fromFloats(0, 0, 0, 0.6f));
+        draw.drawText(text, 2, virtualSize.y / 2f - textOffset + 2, 0.5f, 1f, pixelFont, Colors.RGBA.BLACK);
+        draw.drawText(text, 0, virtualSize.y / 2f - textOffset, 0.5f, 1f, pixelFont, Colors.RGBA.WHITE);
     }
-
 
     @Override
     protected void cleanUp() {
@@ -255,14 +250,13 @@ public final class LudumDare54 extends BaseGame implements Listener {
     }
 
     public static void main(String[] args) {
-        if (EngineRuntime.restartForMacOS(args))
-            return;
-
-        try {
-            new LudumDare54().run();
-        } catch (IOException e) {
-            System.err.println("Failed to load assets");
-            e.printStackTrace();
-        }
+        launch(args, () -> {
+            try {
+                return new LudumDare54();
+            } catch (IOException e) {
+                System.err.println("Failed to load assets");
+                throw new RuntimeException(e);
+            }
+        });
     }
 }

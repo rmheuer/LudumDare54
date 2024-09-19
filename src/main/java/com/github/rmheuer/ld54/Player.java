@@ -1,13 +1,12 @@
 package com.github.rmheuer.ld54;
 
-import com.github.rmheuer.engine.input.keyboard.Key;
-import com.github.rmheuer.engine.input.keyboard.Keyboard;
-import com.github.rmheuer.engine.io.ResourceUtil;
-import com.github.rmheuer.engine.math.MathUtil;
-import com.github.rmheuer.engine.render.Renderer;
-import com.github.rmheuer.engine.render.texture.Texture2DRegion;
-import com.github.rmheuer.engine.render2d.DrawList2D;
-import org.joml.Vector2f;
+import com.github.rmheuer.azalea.input.keyboard.Key;
+import com.github.rmheuer.azalea.input.keyboard.Keyboard;
+import com.github.rmheuer.azalea.io.ResourceUtil;
+import com.github.rmheuer.azalea.math.MathUtil;
+import com.github.rmheuer.azalea.render.Renderer;
+import com.github.rmheuer.azalea.render.texture.Texture2DRegion;
+import com.github.rmheuer.azalea.render2d.DrawList2D;
 
 import java.io.IOException;
 

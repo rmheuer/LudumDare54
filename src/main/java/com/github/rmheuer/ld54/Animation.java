@@ -1,10 +1,10 @@
 package com.github.rmheuer.ld54;
 
-import com.github.rmheuer.engine.render.Renderer;
-import com.github.rmheuer.engine.render.texture.Bitmap;
-import com.github.rmheuer.engine.render.texture.Texture2D;
-import com.github.rmheuer.engine.render.texture.Texture2DRegion;
-import com.github.rmheuer.engine.utils.SafeCloseable;
+import com.github.rmheuer.azalea.render.Renderer;
+import com.github.rmheuer.azalea.render.texture.Bitmap;
+import com.github.rmheuer.azalea.render.texture.Texture2D;
+import com.github.rmheuer.azalea.render.texture.Texture2DRegion;
+import com.github.rmheuer.azalea.utils.SafeCloseable;
 
 import java.io.IOException;
 import java.io.InputStream;

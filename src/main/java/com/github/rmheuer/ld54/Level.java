@@ -1,15 +1,12 @@
 package com.github.rmheuer.ld54;
 
-import com.github.rmheuer.engine.io.ResourceUtil;
-import com.github.rmheuer.engine.math.PoseStack;
-import com.github.rmheuer.engine.render.ColorRGBA;
-import com.github.rmheuer.engine.render.texture.Bitmap;
-import com.github.rmheuer.engine.render.texture.Texture2DRegion;
-import com.github.rmheuer.engine.render2d.DrawList2D;
-import com.github.rmheuer.engine.render2d.Rectangle;
-import org.joml.Vector2f;
+import com.github.rmheuer.azalea.math.PoseStack;
+import com.github.rmheuer.azalea.render.Colors;
+import com.github.rmheuer.azalea.render.texture.Bitmap;
+import com.github.rmheuer.azalea.render.texture.Texture2DRegion;
+import com.github.rmheuer.azalea.render2d.DrawList2D;
+import com.github.rmheuer.azalea.render2d.Rectangle;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -48,18 +45,18 @@ public final class Level {
         return Math.abs(a - b) < 0.1;
     }
 
-    private boolean aboutEqual(ColorRGBA color, float r, float g, float b) {
-        return aboutEqual(color.getRed(), r) &&
-                aboutEqual(color.getGreen(), g) &&
-                aboutEqual(color.getBlue(), b);
+    private boolean aboutEqual(int color, float r, float g, float b) {
+        return aboutEqual(Colors.RGBA.getRed(color) / 255.0f, r) &&
+                aboutEqual(Colors.RGBA.getGreen(color) / 255.0f, g) &&
+                aboutEqual(Colors.RGBA.getBlue(color) / 255.0f, b);
     }
 
     private void applyLayout(Bitmap layout) {
         for (int x = 0; x < SIZE; x++) {
             for (int y = 0; y < SIZE; y++) {
-                ColorRGBA pixel = layout.getPixel(x, SIZE - y - 1);
+                int pixel = layout.getPixel(x, SIZE - y - 1);
                 Tile tile = null;
-                if (pixel.getAlpha() < 0.1) {
+                if (Colors.RGBA.getAlpha(pixel) / 255.0f < 0.1) {
                     tile = Tile.EMPTY;
                 } else if (aboutEqual(pixel, 0.5f, 0.5f, 0.5f)) {
                     tile = Tile.SPIKE;

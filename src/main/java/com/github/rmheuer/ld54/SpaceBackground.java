@@ -1,11 +1,9 @@
 package com.github.rmheuer.ld54;
 
-import com.github.rmheuer.engine.render.ColorRGBA;
-import com.github.rmheuer.engine.render2d.DrawList2D;
+import com.github.rmheuer.azalea.render.Colors;
+import com.github.rmheuer.azalea.render2d.DrawList2D;
 import org.joml.Vector2f;
-
-import java.util.ArrayList;
-import java.util.List;
+import org.joml.Vector4f;
 
 public final class SpaceBackground {
     private final int PARTICLE_COUNT = 200;
@@ -70,7 +68,7 @@ public final class SpaceBackground {
     public void render(DrawList2D draw) {
         for (Particle particle : particles) {
             float bright = 2 * (0.5f - Math.abs(particle.time / particle.lifeTime - 0.5f));
-            draw.fillQuad(particle.position, 1/16f, 1/16f, new ColorRGBA(bright, bright, bright));
+            draw.fillQuad(particle.position, 1/16f, 1/16f, Colors.RGBA.fromFloats(bright, bright, bright));
         }
     }
 }

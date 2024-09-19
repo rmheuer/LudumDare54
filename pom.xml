@@ -54,7 +54,7 @@
   </dependencyManagement>
 
   <dependencies>
-    <dependency>
+    <!--<dependency>
       <groupId>org.joml</groupId>
       <artifactId>joml</artifactId>
       <version>${joml.version}</version>
@@ -328,6 +328,12 @@
       <groupId>org.lwjgl</groupId>
       <artifactId>lwjgl-opengl</artifactId>
       <classifier>natives-windows-arm64</classifier>
+    </dependency>-->
+
+    <dependency>
+      <groupId>com.github.rmheuer</groupId>
+      <artifactId>azalea-core</artifactId>
+      <version>1.0-SNAPSHOT</version>
     </dependency>
   </dependencies>
 </project>

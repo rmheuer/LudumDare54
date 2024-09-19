@@ -1,18 +1,16 @@
 package com.github.rmheuer.ld54;
 
-import com.github.rmheuer.engine.input.keyboard.Key;
-import com.github.rmheuer.engine.io.ResourceUtil;
-import com.github.rmheuer.engine.render.Renderer;
-import com.github.rmheuer.engine.render.texture.Bitmap;
-import com.github.rmheuer.engine.render.texture.Texture2D;
-import com.github.rmheuer.engine.render.texture.Texture2DRegion;
+import com.github.rmheuer.azalea.io.ResourceUtil;
+import com.github.rmheuer.azalea.render.Renderer;
+import com.github.rmheuer.azalea.render.texture.Bitmap;
+import com.github.rmheuer.azalea.render.texture.Texture2D;
+import com.github.rmheuer.azalea.render.texture.Texture2DRegion;
 import org.joml.Vector2i;
 
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
-import java.util.function.BiFunction;
 
 public enum Tile {
     // Index is the frame number in Piskel
