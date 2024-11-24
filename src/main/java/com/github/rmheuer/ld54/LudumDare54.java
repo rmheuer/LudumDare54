@@ -3,8 +3,6 @@ package com.github.rmheuer.ld54;
 import com.github.rmheuer.azalea.audio.PlayOptions;
 import com.github.rmheuer.azalea.audio.data.AudioSample;
 import com.github.rmheuer.azalea.audio.play.PlayingSound;
-import com.github.rmheuer.azalea.event.EventHandler;
-import com.github.rmheuer.azalea.event.Listener;
 import com.github.rmheuer.azalea.input.keyboard.Key;
 import com.github.rmheuer.azalea.input.keyboard.KeyPressEvent;
 import com.github.rmheuer.azalea.io.ResourceUtil;
@@ -24,13 +22,11 @@ import com.github.rmheuer.azalea.render2d.font.Font;
 import com.github.rmheuer.azalea.render2d.font.TrueTypeFont;
 import com.github.rmheuer.azalea.runtime.BaseGame;
 import com.github.rmheuer.azalea.runtime.FixedRateExecutor;
-import org.joml.Matrix4f;
 import org.joml.Vector2i;
-import org.joml.Vector4f;
 
 import java.io.IOException;
 
-public final class LudumDare54 extends BaseGame implements Listener {
+public final class LudumDare54 extends BaseGame {
     public static LudumDare54 INSTANCE;
 
     private final Renderer2D render2d;
@@ -90,7 +86,7 @@ public final class LudumDare54 extends BaseGame implements Listener {
         level.addEntity(player);
         level.setPlayer(player);
 
-        getEventBus().registerListener(this);
+        getEventBus().addListener(KeyPressEvent.class, this::onKeyPress);
 
         gravityChangeSound = getAudioSystem().createSample(ResourceUtil.readAsStream("better_gravity.ogg"));
         levelSwitchSound = getAudioSystem().createSample(ResourceUtil.readAsStream("level switch.ogg"));
@@ -170,7 +166,6 @@ public final class LudumDare54 extends BaseGame implements Listener {
     }
 
     boolean whichMap = true;
-    @EventHandler
     public void onKeyPress(KeyPressEvent event) {
         if (event.getKey() == Key.SPACE) {
             if (level.getCurrentLevel() == 0) {
@@ -212,7 +207,7 @@ public final class LudumDare54 extends BaseGame implements Listener {
         Vector2i size = getWindow().getFramebufferSize();
         Vector2i virtualSize = getWindow().getSize();
 
-        render2d.draw(draw, new Matrix4f(), camera.getProjectionMatrix(size.x, size.y), camera.getViewMatrix());
+        render2d.draw(draw, camera.getProjectionMatrix(size.x, size.y).mul(camera.getViewMatrix()));
 
         DrawList2D screenDraw = new DrawList2D();
         screenDraw.getPoseStack().stack.scale(1, -1, 1);
@@ -234,7 +229,7 @@ public final class LudumDare54 extends BaseGame implements Listener {
         drawFancyText(virtualSize, left, textOffset, screenDraw);
 
         ConstantOrthoProjection screenProj = new ConstantOrthoProjection(1, -1, 1);
-        render2d.draw(screenDraw, new Matrix4f(), screenProj.getMatrix(virtualSize.x, virtualSize.y), new Matrix4f());
+        render2d.draw(screenDraw, screenProj.getMatrix(virtualSize.x, virtualSize.y));
     }
 
     private void drawFancyText(Vector2i virtualSize, String text, float textOffset, DrawList2D draw) {
