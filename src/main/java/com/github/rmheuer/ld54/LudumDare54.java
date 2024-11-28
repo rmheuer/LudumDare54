@@ -245,13 +245,11 @@ public final class LudumDare54 extends BaseGame {
     }
 
     public static void main(String[] args) {
-        launch(args, () -> {
-            try {
-                return new LudumDare54();
-            } catch (IOException e) {
-                System.err.println("Failed to load assets");
-                throw new RuntimeException(e);
-            }
-        });
+        try {
+            new LudumDare54().run();
+        } catch (IOException e) {
+            System.err.println("Failed to load assets");
+            e.printStackTrace();
+        }
     }
 }
