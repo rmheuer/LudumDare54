@@ -6,12 +6,13 @@ import com.github.rmheuer.azalea.render.texture.Bitmap;
 import com.github.rmheuer.azalea.render.texture.Texture2DRegion;
 import com.github.rmheuer.azalea.render2d.DrawList2D;
 import com.github.rmheuer.azalea.render2d.Rectangle;
+import com.github.rmheuer.azalea.utils.SafeCloseable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public final class Level {
+public final class Level implements SafeCloseable {
     public static final int SIZE = 4 * 6;
 
     private final Tile[] tiles;
@@ -90,6 +91,8 @@ public final class Level {
     }
 
     public void load(Bitmap nextLevel) {
+        if (nextLayout != null)
+            nextLayout.close();
         nextLayout = nextLevel;
         appearedness = -1;
         entities.clear();
@@ -123,6 +126,7 @@ public final class Level {
             if (appearedness > 0) {
                 appearedness = 0;
                 applyLayout(nextLayout);
+                nextLayout.close();
                 nextLayout = null;
             }
         } else if (appearedness < 1) {
@@ -237,5 +241,12 @@ public final class Level {
 
     public void addEntity(Entity e) {
         entities.add(e);
+    }
+
+    @Override
+    public void close() {
+        if (nextLayout != null) {
+            nextLayout.close();
+        }
     }
 }

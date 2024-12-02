@@ -94,12 +94,15 @@ public enum Tile {
     private final boolean solid;
 
     public static void init(Renderer renderer) throws IOException {
-        Bitmap bitmap = Bitmap.decode(ResourceUtil.readAsStream("tiles2-3.png"));
-        int tilesX = bitmap.getWidth() / TILE_SIZE_PX;
-        int tilesY = bitmap.getHeight() / TILE_SIZE_PX;
+        Texture2D texture;
+        int tilesX, tilesY;
+        try (Bitmap bitmap = Bitmap.decode(ResourceUtil.readAsStream("tiles2-3.png"))) {
+            tilesX = bitmap.getWidth() / TILE_SIZE_PX;
+            tilesY = bitmap.getHeight() / TILE_SIZE_PX;
 
-        Texture2D texture = renderer.createTexture2D();
-        texture.setData(bitmap);
+            texture = renderer.createTexture2D();
+            texture.setData(bitmap);
+        }
 
         float sizeX = 1.0f / tilesX;// - 0.0001f;
         float sizeY = 1.0f / tilesY;// - 0.0001f;

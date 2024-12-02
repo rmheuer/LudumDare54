@@ -11,14 +11,17 @@ import java.io.InputStream;
 
 public final class Animation implements SafeCloseable {
     public static Animation fromSpriteSheetVertical(Renderer renderer, InputStream stream, float frameRate) throws IOException {
-        Bitmap bmp = Bitmap.decode(stream);
-        Texture2D texture = renderer.createTexture2D();
-        texture.setData(bmp);
+        Texture2D texture;
+        int sz, height;
+        try (Bitmap bmp = Bitmap.decode(stream)) {
+            texture = renderer.createTexture2D();
+            texture.setData(bmp);
 
-        // Assume square
-        int sz = bmp.getWidth();
+            sz = bmp.getWidth();
+            height = bmp.getHeight();
+        }
 
-        int count = bmp.getHeight() / sz;
+        int count = height / sz;
         Texture2DRegion[] frames = new Texture2DRegion[count];
         for (int i = 0; i < count; i++) {
             frames[i] = texture.getSubRegion(0, i / (float) count, 1, (i + 1) / (float) count);

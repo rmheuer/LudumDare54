@@ -68,7 +68,7 @@ public final class SpaceBackground {
     public void render(DrawList2D draw) {
         for (Particle particle : particles) {
             float bright = 2 * (0.5f - Math.abs(particle.time / particle.lifeTime - 0.5f));
-            draw.fillQuad(particle.position, 1/16f, 1/16f, Colors.RGBA.fromFloats(bright, bright, bright));
+            draw.fillQuad(particle.position.x, particle.position.y, 1/16f, 1/16f, Colors.RGBA.fromFloats(bright, bright, bright));
         }
     }
 }

@@ -21,14 +21,19 @@ import com.github.rmheuer.azalea.render2d.Renderer2D;
 import com.github.rmheuer.azalea.render2d.font.Font;
 import com.github.rmheuer.azalea.render2d.font.TrueTypeFont;
 import com.github.rmheuer.azalea.runtime.BaseGame;
+import com.github.rmheuer.azalea.runtime.EngineRuntime;
 import com.github.rmheuer.azalea.runtime.FixedRateExecutor;
 import org.joml.Vector2i;
 
 import java.io.IOException;
 
+import com.github.rmheuer.azalea.imgui.ImGuiBackend;
+import imgui.ImGui;
+
 public final class LudumDare54 extends BaseGame {
     public static LudumDare54 INSTANCE;
 
+    private final ImGuiBackend imGuiBackend;
     private final Renderer2D render2d;
     private final Camera camera;
     private final FixedRateExecutor update;
@@ -53,8 +58,11 @@ public final class LudumDare54 extends BaseGame {
         super(new WindowSettings(
                 Level.SIZE * Tile.TILE_SIZE_PX * 2,
                 Level.SIZE * Tile.TILE_SIZE_PX * 2,
-                "Gravity Warp"));
+                "Gravity Warp")
+            .setVSync(false));
         INSTANCE = this;
+
+	imGuiBackend = new ImGuiBackend(getWindow(), getEventBus());
         render2d = new Renderer2D(getRenderer());
         update = new FixedRateExecutor(1 / 60.0f, this::fixedTick);
 
@@ -108,7 +116,8 @@ public final class LudumDare54 extends BaseGame {
 
     private void fixedTick(float dt) {
         if (!level.isTransitioning() && level.getCurrentLevel() != 0)
-            player.control(dt, getWindow().getKeyboard());
+	    player.control(dt, imGuiBackend.getMaskedKeyboard());
+	    //player.control(dt, getWindow().getKeyboard());
 	level.tick(dt);
     }
 
@@ -196,6 +205,8 @@ public final class LudumDare54 extends BaseGame {
 
     @Override
     protected void render(Renderer renderer) {
+        imGuiBackend.beginFrame();
+	
         DrawList2D draw = new DrawList2D();
         PoseStack poseStack = draw.getPoseStack();
 
@@ -230,22 +241,37 @@ public final class LudumDare54 extends BaseGame {
 
         ConstantOrthoProjection screenProj = new ConstantOrthoProjection(1, -1, 1);
         render2d.draw(screenDraw, screenProj.getMatrix(virtualSize.x, virtualSize.y));
+
+	ImGui.showDemoWindow();
+	imGuiBackend.endFrameAndRender();
     }
 
     private void drawFancyText(Vector2i virtualSize, String text, float textOffset, DrawList2D draw) {
         float width = pixelFont.textWidth(text);
-        draw.fillQuad(Rectangle.fromCenterSizes(0, virtualSize.y / 2f - textOffset - 8, width + 4, 20), Colors.RGBA.fromFloats(0, 0, 0, 0.6f));
+        Rectangle bgRect = Rectangle.fromCenterSizes(0, virtualSize.y / 2f - textOffset - 8, width + 4, 20);
+        draw.fillQuad(bgRect.getMin().x, bgRect.getMin().y, bgRect.getWidth(), bgRect.getHeight(), Colors.RGBA.fromFloats(0, 0, 0, 0.6f));
         draw.drawText(text, 2, virtualSize.y / 2f - textOffset + 2, 0.5f, 1f, pixelFont, Colors.RGBA.BLACK);
         draw.drawText(text, 0, virtualSize.y / 2f - textOffset, 0.5f, 1f, pixelFont, Colors.RGBA.WHITE);
     }
 
     @Override
     protected void cleanUp() {
+        gravityChangeSound.close();
+        levelSwitchSound.close();
+        outOfFuelSound.close();
+        sensorActivatedSound.close();
+        sensorDeactivatedSound.close();
+        playerDieSound.close();
+        jumpSound.close();
+        pixelFont.close();
+        level.close();
         render2d.close();
+	imGuiBackend.close();
     }
 
     public static void main(String[] args) {
         try {
+            EngineRuntime.enableLWJGLDebug();
             new LudumDare54().run();
         } catch (IOException e) {
             System.err.println("Failed to load assets");
