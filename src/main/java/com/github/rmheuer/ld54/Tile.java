@@ -119,7 +119,7 @@ public enum Tile {
                 float x = col / (float) tilesX;
                 float y = row / (float) tilesY;
 
-                frames[i] = texture.getSubRegion(x, y, x + sizeX, y + sizeY).getFlippedX();
+                frames[i] = texture.getSubRegion(x, y, x + sizeX, y + sizeY).getFlippedVertically();
             }
             tile.anim = new Animation(null, frames, 10);
         }

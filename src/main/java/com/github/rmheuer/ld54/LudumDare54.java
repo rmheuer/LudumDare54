@@ -33,7 +33,7 @@ import imgui.ImGui;
 public final class LudumDare54 extends BaseGame {
     public static LudumDare54 INSTANCE;
 
-    private final ImGuiBackend imGuiBackend;
+    //private final ImGuiBackend imGuiBackend;
     private final Renderer2D render2d;
     private final Camera camera;
     private final FixedRateExecutor update;
@@ -62,7 +62,7 @@ public final class LudumDare54 extends BaseGame {
             .setVSync(false));
         INSTANCE = this;
 
-	imGuiBackend = new ImGuiBackend(getWindow(), getEventBus());
+	//imGuiBackend = new ImGuiBackend(getWindow(), getEventBus());
         render2d = new Renderer2D(getRenderer());
         update = new FixedRateExecutor(1 / 60.0f, this::fixedTick);
 
@@ -94,7 +94,7 @@ public final class LudumDare54 extends BaseGame {
         level.addEntity(player);
         level.setPlayer(player);
 
-        getEventBus().addListener(KeyPressEvent.class, this::onKeyPress);
+        getEventBus().addHandler(KeyPressEvent.class, this::onKeyPress);
 
         gravityChangeSound = getAudioSystem().createSample(ResourceUtil.readAsStream("better_gravity.ogg"));
         levelSwitchSound = getAudioSystem().createSample(ResourceUtil.readAsStream("level switch.ogg"));
@@ -116,8 +116,8 @@ public final class LudumDare54 extends BaseGame {
 
     private void fixedTick(float dt) {
         if (!level.isTransitioning() && level.getCurrentLevel() != 0)
-	    player.control(dt, imGuiBackend.getMaskedKeyboard());
-	    //player.control(dt, getWindow().getKeyboard());
+	    //player.control(dt, imGuiBackend.getMaskedKeyboard());
+	    player.control(dt, getWindow().getKeyboard());
 	level.tick(dt);
     }
 
@@ -205,7 +205,7 @@ public final class LudumDare54 extends BaseGame {
 
     @Override
     protected void render(Renderer renderer) {
-        imGuiBackend.beginFrame();
+        //imGuiBackend.beginFrame();
 	
         DrawList2D draw = new DrawList2D();
         PoseStack poseStack = draw.getPoseStack();
@@ -242,8 +242,8 @@ public final class LudumDare54 extends BaseGame {
         ConstantOrthoProjection screenProj = new ConstantOrthoProjection(1, -1, 1);
         render2d.draw(screenDraw, screenProj.getMatrix(virtualSize.x, virtualSize.y));
 
-	ImGui.showDemoWindow();
-	imGuiBackend.endFrameAndRender();
+	//	ImGui.showDemoWindow();
+	//imGuiBackend.endFrameAndRender();
     }
 
     private void drawFancyText(Vector2i virtualSize, String text, float textOffset, DrawList2D draw) {
@@ -266,7 +266,7 @@ public final class LudumDare54 extends BaseGame {
         pixelFont.close();
         level.close();
         render2d.close();
-	imGuiBackend.close();
+	//imGuiBackend.close();
     }
 
     public static void main(String[] args) {

@@ -21,6 +21,6 @@ public final class Box extends Entity {
 
     @Override
     public void render(DrawList2D draw) {
-        draw.drawImage(position.x, position.y, 1, 1, texture.getFlippedX(), 0, 0, 1, 1);
+        draw.drawImage(position.x, position.y, 1, 1, texture.getFlippedVertically(), 0, 0, 1, 1);
     }
 }

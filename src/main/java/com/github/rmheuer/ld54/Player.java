@@ -91,8 +91,8 @@ public final class Player extends Entity {
 
     public void render(DrawList2D draw) {
         GravityDir dir = level.getGravity();
-        Texture2DRegion tex = anim.getCurrentFrameTexture().getFlippedX();
-        tex = (flipped ^ (dir == GravityDir.UP || dir == GravityDir.LEFT)) ? tex.getFlippedY() : tex;
+        Texture2DRegion tex = anim.getCurrentFrameTexture().getFlippedVertically();
+        tex = (flipped ^ (dir == GravityDir.UP || dir == GravityDir.LEFT)) ? tex.getFlippedHorizontally() : tex;
 
         draw.pushTransform();
         draw.getPoseStack().stack.translate(position.x + 0.5f, position.y + 0.5f, 0);
