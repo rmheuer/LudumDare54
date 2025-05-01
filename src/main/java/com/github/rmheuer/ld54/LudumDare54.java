@@ -206,41 +206,43 @@ public final class LudumDare54 extends BaseGame {
     @Override
     protected void render(Renderer renderer) {
         //imGuiBackend.beginFrame();
-	
-        DrawList2D draw = new DrawList2D();
-        PoseStack poseStack = draw.getPoseStack();
-
-        background.render(draw);
-        level.render(draw);
-        if (level.getCurrentLevel() != 0)
-            player.render(draw);
 
         Vector2i size = getWindow().getFramebufferSize();
         Vector2i virtualSize = getWindow().getSize();
 
-        render2d.draw(draw, camera.getProjectionMatrix(size.x, size.y).mul(camera.getViewMatrix()));
+        try (DrawList2D draw = new DrawList2D()) {
+            PoseStack poseStack = draw.getPoseStack();
 
-        DrawList2D screenDraw = new DrawList2D();
-        screenDraw.getPoseStack().stack.scale(1, -1, 1);
+            background.render(draw);
+            level.render(draw);
+            if (level.getCurrentLevel() != 0)
+                player.render(draw);
 
-        float textOffset = 5;
-        String left = "SPACE LEFT: " + spaceLeft;
-        if (spaceLeft == 0) {
-            left += " (PRESS R TO RESTART)";
+            render2d.draw(draw, camera.getProjectionMatrix(size.x, size.y).mul(camera.getViewMatrix()));
         }
 
-        if (level.getCurrentLevel() == 0) {
-            textOffset = virtualSize.y / 4f;
-            left = "PRESS SPACE TO START";
-            drawFancyText(virtualSize, "ARROWS OR WASD TO MOVE", virtualSize.y / 4f - 38, screenDraw);
-            drawFancyText(virtualSize, "LUDUM DARE 54", virtualSize.y / 4f - 76, screenDraw);
-            drawFancyText(virtualSize, "BY RMHEUER AND CAPNBONES", virtualSize.y / 4f - 76 - 18, screenDraw);
+        try (DrawList2D screenDraw = new DrawList2D()) {
+            screenDraw.getPoseStack().stack.scale(1, -1, 1);
+
+            float textOffset = 5;
+            String left = "SPACE LEFT: " + spaceLeft;
+            if (spaceLeft == 0) {
+                left += " (PRESS R TO RESTART)";
+            }
+
+            if (level.getCurrentLevel() == 0) {
+                textOffset = virtualSize.y / 4f;
+                left = "PRESS SPACE TO START";
+                drawFancyText(virtualSize, "ARROWS OR WASD TO MOVE", virtualSize.y / 4f - 38, screenDraw);
+                drawFancyText(virtualSize, "LUDUM DARE 54", virtualSize.y / 4f - 76, screenDraw);
+                drawFancyText(virtualSize, "BY RMHEUER AND CAPNBONES", virtualSize.y / 4f - 76 - 18, screenDraw);
+            }
+
+            drawFancyText(virtualSize, left, textOffset, screenDraw);
+
+            ConstantOrthoProjection screenProj = new ConstantOrthoProjection(1, -1, 1);
+            render2d.draw(screenDraw, screenProj.getMatrix(virtualSize.x, virtualSize.y));
         }
-
-        drawFancyText(virtualSize, left, textOffset, screenDraw);
-
-        ConstantOrthoProjection screenProj = new ConstantOrthoProjection(1, -1, 1);
-        render2d.draw(screenDraw, screenProj.getMatrix(virtualSize.x, virtualSize.y));
 
 	//	ImGui.showDemoWindow();
 	//imGuiBackend.endFrameAndRender();
@@ -249,7 +251,7 @@ public final class LudumDare54 extends BaseGame {
     private void drawFancyText(Vector2i virtualSize, String text, float textOffset, DrawList2D draw) {
         float width = pixelFont.textWidth(text);
         Rectangle bgRect = Rectangle.fromCenterSizes(0, virtualSize.y / 2f - textOffset - 8, width + 4, 20);
-        draw.fillQuad(bgRect.getMin().x, bgRect.getMin().y, bgRect.getWidth(), bgRect.getHeight(), Colors.RGBA.fromFloats(0, 0, 0, 0.6f));
+        draw.fillRect(bgRect.getMin().x, bgRect.getMin().y, bgRect.getWidth(), bgRect.getHeight(), Colors.RGBA.fromFloats(0, 0, 0, 0.6f));
         draw.drawText(text, 2, virtualSize.y / 2f - textOffset + 2, 0.5f, 1f, pixelFont, Colors.RGBA.BLACK);
         draw.drawText(text, 0, virtualSize.y / 2f - textOffset, 0.5f, 1f, pixelFont, Colors.RGBA.WHITE);
     }

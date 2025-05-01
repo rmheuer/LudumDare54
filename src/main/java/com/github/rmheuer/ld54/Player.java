@@ -94,11 +94,11 @@ public final class Player extends Entity {
         Texture2DRegion tex = anim.getCurrentFrameTexture().getFlippedVertically();
         tex = (flipped ^ (dir == GravityDir.UP || dir == GravityDir.LEFT)) ? tex.getFlippedHorizontally() : tex;
 
-        draw.pushTransform();
+        draw.getPoseStack().push();
         draw.getPoseStack().stack.translate(position.x + 0.5f, position.y + 0.5f, 0);
         draw.getPoseStack().stack.rotateZ(angle);
         draw.getPoseStack().stack.translate(-0.5f, -0.5f, 0);
         draw.drawImage(0, 0, 1, 1, tex, 0, 0, 1, 1);
-        draw.popTransform();
+        draw.getPoseStack().pop();
     }
 }
